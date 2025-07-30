@@ -1,38 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-int main(int argc, char *argv[]) {
-    if (argc != 3) {
+struct {
+    int year, month, day;
+    int hour, minute, second;
+    int status, code;
+} User_input;
+
+void print_file(FILE *file) {
+    int ch;
+    while ((ch = fgetc(file)) != EOF)
+    {
+        printf("%c", ch);
+    }
+}
+
+int main() {
+    char filepath[256];
+    int choice;
+
+    scanf("%s", &filepath);
+
+    FILE *file = fopen(filepath, "r");
+
+    if (file == NULL)
+    {
         printf("n/a\n");
-        return 1;
+        return 0;
     }
 
-    const char *filename = argv[1];
-    const char *search_date = argv[2];
-
-    FILE *file = fopen(filename, "rb");
-    if (!file) {
-        printf("n/a\n");
-        return 1;
+    switch (choice)
+    {
+    case 0:
+        print_file(file);
+        break;
+    default:
+        break;
     }
 
-    int code;
-    char date[11];
-
-    while (fread(&code, sizeof(int), 1, file) == 1) {
-        if (fread(date, sizeof(char), 11, file) != 11) {
-            break;
-        }
-
-        if (strcmp(date, search_date) == 0) {
-            printf("%d\n", code);
-            fclose(file);
-            return 0;
-        }
-    }
-
-    printf("n/a\n");
     fclose(file);
-    return 1;
+
+    return 0;
 }
